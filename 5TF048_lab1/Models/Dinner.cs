@@ -12,9 +12,17 @@ namespace _5TF048_lab1.Models
         [Required]
         public int NumberofPortions { get; set; }
         public string Review { get; set; }
+
+        [Display(Name = "dl Flour")]
         public int Flour { get; set; }
+
+        [Display(Name = "nr of Eggs")]
         public int Egg { get; set; }
+
+        [Display(Name = "Salt (spoons)")]
         public int Salt { get; set; }
+
+        [Display(Name = "Milk (dl)")]
         public int Milk { get; set; }
 
         [Required]

@@ -1,0 +1,12 @@
+﻿@model List<SelectListItem>
+
+@{
+    ViewData["Title"] = "Evaluate";
+}
+
+<h2>Evaluate</h2>
+
+@foreach (SelectListItem item in Model){
+    <input type ="radio" name="Evaluate" value="@Html.DisplayFor(model => item.Value)">@item.Text<br />
+
+}
