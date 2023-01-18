@@ -40,10 +40,10 @@ namespace _5TF048_lab1.Models
 
         public void Calculate()
         {
-            Flour = Flour + 1;
-            Egg = Egg + 1;
-            Salt = Salt + 1;
-            Milk = Milk + 1;
+            Flour = Flour* NumberofPortions;
+            Egg = Egg*2* NumberofPortions;
+            Salt = Salt*5*NumberofPortions;
+            Milk = Milk * 31 * NumberofPortions;
         }
     }
 

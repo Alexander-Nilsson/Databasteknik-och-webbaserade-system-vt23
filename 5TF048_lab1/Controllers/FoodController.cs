@@ -12,7 +12,7 @@ namespace _5TF048_lab1.Controllers
     public class FoodController : Controller
     {
         [HttpGet]
-        public IActionResult Index(){
+        public IActionResult Start(){
             return View();
         }
 
