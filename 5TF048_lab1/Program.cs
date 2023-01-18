@@ -1,7 +1,18 @@
+using Microsoft.Extensions.Options;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddDistributedMemoryCache(); // added to enable sessions from: https://mycodeblock.com/how-to-enable-session-in-asp-net-core-6-and-above/
+builder.Services.AddSession();
+
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(10);
+});
+
 
 var app = builder.Build();
 
@@ -13,15 +24,19 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession(); // adds sessions
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Food}/{action=Index}/{id?}");
 
 app.Run();
