@@ -1,0 +1,23 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+@{
+    ViewData["Title"] = "Start Page";
+}
+
+<div class="text-center">
+    <h4 class="display-4">Welcome to NotBlocket</h4>
+</div>
+
+
+<form action="NotBlocket/SearchResults" method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" name="searchTerm" placeholder="Search">
+    </div>
+    <input type="submit" value="Get recept" class="btn btn-primary" />
+</form>
+
+<div>
+    <a asp-action="Login">Login</a>
+</div>
