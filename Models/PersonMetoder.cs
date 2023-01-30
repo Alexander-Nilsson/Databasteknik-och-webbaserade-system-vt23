@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.SqlServer.Server;
 
 namespace Laboration_3___Databasdriven_webbapplikation.Models {
     public class PersonMetoder {
@@ -129,6 +130,60 @@ namespace Laboration_3___Databasdriven_webbapplikation.Models {
                 return null;
             }
             
+            finally { dbConnection.Close(); }
+
+
+
+
+        }
+
+
+        public List<PersonDetalj> GetPersonWithDataReader(out string errormsg) {
+
+            //Skapa Sql connection
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DatabasLab3;Integrated Security=True";
+
+            String sqlstring = "SELECT * FROM Person";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
+
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+
+            SqlDataReader reader= null;
+
+            List<PersonDetalj> PersonList = new List<PersonDetalj>();
+
+            errormsg = "";
+
+            try {
+   
+                    // open the connection
+                    dbConnection.Open();
+                    // 1. get an instance of the SqlDataReader
+                    reader = dbCommand.ExecuteReader();
+                // 2. read necessary columns of I each record
+                while (reader.Read()) {
+
+                    PersonDetalj Person = new PersonDetalj();
+                    Person.Fornamn = reader["Fornam"].ToString();
+                    Person.Efternamn = reader["Efternamn"].ToString();
+                    Person.Epost = reader["Epost"].ToString();
+                    Person.Bor = Convert.ToInt16(reader["Bor"]);
+                    Person.Fodelsear = Convert.ToInt16(reader["Fodelsear"]);
+                    Person.Id = Convert.ToInt16(reader["Id"]);
+                    PersonList.Add(Person);
+                }
+             reader.Close();
+             return PersonList;
+
+             }
+
+             catch (Exception e) {
+             errormsg = e.Message;
+             return null;
+             }
+
             finally { dbConnection.Close(); }
         }
     }

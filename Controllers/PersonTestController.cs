@@ -72,5 +72,14 @@ namespace Laboration_3___Databasdriven_webbapplikation.Controllers {
             ViewBag.error = error;
             return View(Personlist);
         }
+
+        public ActionResult SelectWithDataReader() {
+            List<PersonDetalj> Personlist = new List<PersonDetalj>();
+            PersonMetoder pm = new PersonMetoder();
+            string error = "";
+            Personlist = pm.GetPersonWithDataSet(out error);
+            ViewBag.error = error;
+            return View(Personlist);
+        }
     }
 }
