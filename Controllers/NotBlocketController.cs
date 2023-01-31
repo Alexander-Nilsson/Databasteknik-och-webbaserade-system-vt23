@@ -12,7 +12,14 @@ namespace NotBlocket2.Controllers {
         [HttpGet]
         public IActionResult SearchResults(string searchTerm) {
             ViewBag.SearchTerm = searchTerm;
-            return View();
+
+            //Get the Ad list
+            List<Ad> Adlist = new List<Ad>();
+            AdMethods pm = new AdMethods();
+            string error = "";
+            Adlist = pm.GetAdsWithDataSet(out error);
+            ViewBag.error = error;
+            return View(Adlist);
         }
 
         [HttpGet]

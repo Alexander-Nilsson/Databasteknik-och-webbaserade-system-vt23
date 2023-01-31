@@ -20,13 +20,11 @@ namespace NotBlocket2.Models {
             String sqlstring = "INSERT INTO [NotBlocket].[dbo].[Profiles] (Name, Email, Password) VALUES (@Name, @Email, @Password)";
             // For now no way of adding location, 
 
-
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             dbCommand.Parameters.Add("Name", SqlDbType.NVarChar, 30).Value = pd.Name;
             dbCommand.Parameters.Add("Email", SqlDbType.NVarChar, 50).Value = pd.Email;
             dbCommand.Parameters.Add("Password", SqlDbType.NVarChar, 50).Value = pd.Password;
-
 
             try {
                 dbConnection.Open();
@@ -53,11 +51,8 @@ namespace NotBlocket2.Models {
 
             String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Profiles]";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-
-
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();
-
             List<Profile> PersonList = new List<Profile>();
 
             try {
@@ -67,7 +62,6 @@ namespace NotBlocket2.Models {
 
                 int count = 0;
                 int i = 0;
-
                 count = myDS.Tables["myPerson"].Rows.Count;
 
 
