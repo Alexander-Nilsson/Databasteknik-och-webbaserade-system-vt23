@@ -10,16 +10,31 @@ namespace NotBlocket2.Controllers {
         }
 
         [HttpGet]
-        public IActionResult SearchResults(string searchTerm) {
-            ViewBag.SearchTerm = searchTerm;
+        public IActionResult SearchResults(string search, string sort) {
+            
+            
+
+            if (sort == null) {
+                sort = "Name";
+            }
+
+            if (search == null) {
+                search = "volvo";
+            }
+
+
+            ViewBag.SearchTerm = search;
+            ViewBag.Sort = sort;
 
             //Get the Ad list
             List<Ad> Adlist = new List<Ad>();
             AdMethods pm = new AdMethods();
             string error = "";
-            Adlist = pm.GetAdsWithDataSet(out error);
+            Adlist = pm.GetAdsWithDataSet(sort, search, out error);
             ViewBag.error = error;
             return View(Adlist);
+            
+
         }
 
         [HttpGet]

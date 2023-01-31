@@ -5,27 +5,36 @@
 }
 <h1>Searchresult</h1>
 
-@ViewBag.SearchTerm
+Search term: @ViewBag.SearchTerm
+
+sort: @ViewBag.sort
+
 @ViewBag.error
 
 <table class="table">
     <thead>
         <tr>
             <th>
+                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Id">
                 @Html.DisplayNameFor(model => model.Id)
+                </a>
             </th>
             <th>
+                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Name">
                 @Html.DisplayNameFor(model => model.Name)
+                </a>
             </th>
             <th>
                 @*Enables sorting by price while keeping the searchterm*@
-                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm sort=price">
+
+                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Price">
                     @Html.DisplayNameFor(model => model.Price)
                 </a>
             </th>
 
         </tr>
     </thead>
+    
     <tbody>
         @foreach (var item in Model) {
             <tr>
@@ -41,6 +50,7 @@
             </tr>
         }
     </tbody>
+    
 </table>
 
 
