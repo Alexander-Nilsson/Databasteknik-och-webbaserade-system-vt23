@@ -15,32 +15,41 @@ namespace NotBlocket2.Controllers {
             return View();
         }
 
+        [HttpGet]
+        public IActionResult CreateAccount() {
+            return View();
+        }
+
+        public IActionResult FailedToCreateAccount() {
+            return View();
+        }
+
         [HttpPost]
-		public IActionResult CreateAccount() {
-            Profile pm = new Profile();
+		public IActionResult CreateAccount(Profile p) {
+            //Profile p = new Profile();
+            ProfileMethods pm = new ProfileMethods();
             int i = 0;
             string error = "";
 
-            i = pm.InsertPerson(pm, out error);
+            i = pm.InsertProfile(p, out error);
             ViewBag.error = error;
             ViewBag.antal = i;
 
             //if i = 1 success, else failed to add profile
-            if (i == 1) { return RedirectToAction("SelectWithDataSet"); }
-            else { return View("InsertPerson"); }
+            // TODO change this so you get login view after loging in instead of db view
+            if (i == 1) { return RedirectToAction("GetPersonWithDataSet"); }
+            else { return View("FailedToCreateAccount"); }
         }
 
         [HttpGet]
-        public ActionResult SelectWithDataReader() {
-            List<Profile> Personlist = new List<Profile>();
-            Profile pm = new Profile();
+        public ActionResult GetPersonWithDataSet() {
+            List<Profile> Profilelist = new List<Profile>();
+            ProfileMethods pm = new ProfileMethods();
             string error = "";
-            Personlist = pm.GetProfileWithDataReader(out error);
+            Profilelist = pm.GetPersonWithDataSet(out error);
             ViewBag.error = error;
-            return View(Personlist);
+            return View(Profilelist);
         }
-
-
 
         public IActionResult Login() {
             return View();
