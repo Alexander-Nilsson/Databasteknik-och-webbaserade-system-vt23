@@ -11,16 +11,10 @@ namespace NotBlocket2.Controllers {
 
         [HttpGet]
         public IActionResult SearchResults(string search, string sort) {
-            
-            
-
-            if (sort == null) {
-                sort = "Name";
-            }
-
-            if (search == null) {
-                search = "volvo";
-            }
+           
+            //Dealing with the null-values
+            if (sort == null) { sort = "Name";  }
+            if (search == null) {search = "volvo"; }
 
 
             ViewBag.SearchTerm = search;
@@ -30,19 +24,18 @@ namespace NotBlocket2.Controllers {
             List<Ad> Adlist = new List<Ad>();
             AdMethods pm = new AdMethods();
             string error = "";
-            Adlist = pm.GetAdsWithDataSet(sort, search, out error);
+            Adlist = pm.GetAdsWithDataSet2(sort, search, out error);
             ViewBag.error = error;
             return View(Adlist);
-            
+        }
 
+        [HttpGet]
+        public IActionResult FailedToCreateAccount() {
+            return View();
         }
 
         [HttpGet]
         public IActionResult CreateAccount() {
-            return View();
-        }
-
-        public IActionResult FailedToCreateAccount() {
             return View();
         }
 
@@ -76,7 +69,29 @@ namespace NotBlocket2.Controllers {
         public IActionResult Login() {
             return View();
         }
+        
+        [HttpGet]
+        public IActionResult LoginPage() {
+            return View();
+        }
 
+        [HttpGet]
+        public IActionResult Filtering() {
+            ProfileMethods pm = new ProfileMethods();
+            LocationMethods lm = new LocationMethods();
+            AdMethods am = new AdMethods();
+
+            ViewModelProfileAdsLocation myModel = new ViewModelProfileAdsLocation
+            {
+                ProfileList = pm.GetPersonWithDataSet(out string errormsg),
+                LocationList = lm.GetLocationsWithDataSet(out string errormsg2),
+                AdList = am.GetAdsWithDataSet(out string errormsg3)
+            
+            };
+            ViewBag.error = "1: " + errormsg + "2: " + errormsg2 + "3: " + errormsg3;
+
+            return View(myModel);
+        }
 
     }
 }

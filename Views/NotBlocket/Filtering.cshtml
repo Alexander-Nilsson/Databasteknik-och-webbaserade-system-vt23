@@ -1,0 +1,49 @@
+﻿@model NotBlocket2.Models.ViewModelProfileAdsLocation
+
+
+<h2>Filtering</h2>
+
+<div class="row">
+	<div class="form-group col-md-4">
+		<form asp-action="Filtering">
+			<div class="form-group">
+				<select class="form-control" id="Location" name="Location">
+					@foreach (NotBlocket2.Models.Ad Ad in Model.AdList) {
+						<option value="@Ad.Id ">@Ad.Category</option>
+					}
+				</select>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div class="row">
+	<div class="form-group col-md-4">
+		<form asp-action="Filtering" method="post">
+			<div class="form-group">
+				<select class="form-control" id="Location" name="Location">
+					
+							<option value=" 1 ">Halmstad</option>
+							<option value=" 2 ">Stockholm</option>
+							<option value=" 3 ">Gothemburg</option>
+					
+				</select>
+			</div>
+		</form>
+	</div>
+</div>
+
+<h4>Ad Table</h4>
+<table class="table">
+	<tr>
+		<th>Name</th>
+		<th>Price</th>
+	</tr>
+	@foreach (NotBlocket2.Models.Ad Ad in Model.AdList) {
+		<tr>
+			<td>@Ad.Name</td>
+			<td>@Ad.Price</td>
+		</tr>
+	}
+
+</table>
