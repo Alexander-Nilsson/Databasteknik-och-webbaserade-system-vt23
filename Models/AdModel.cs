@@ -27,11 +27,12 @@ namespace NotBlocket2.Models {
 
             String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Ads]";
 
-            if(filterByCategorystring != null) {
-				sqlstring = sqlstring + "WHERE [NotBlocket].[dbo].[Ads].[Category] = '" + filterByCategorystring +"'"; };
+            if (filterByCategorystring != null) {
+                sqlstring = sqlstring + "WHERE [NotBlocket].[dbo].[Ads].[Category] = '" + filterByCategorystring + "'";
+            };
 
-			errormsg = sqlstring;
-			SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            errormsg = sqlstring;
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();
@@ -81,28 +82,19 @@ namespace NotBlocket2.Models {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DatabasLab3;Integrated Security=True";
 
+
+            //add ASC vs DESC?
+        
             String sqlstring = @"
                                 SELECT *
                                 FROM [NotBlocket].[dbo].[Ads]
                                 WHERE [NotBlocket].[dbo].[Ads].[Name] LIKE '%'+'" + searchstring + @"'+'%'
                                 ORDER BY 
-                                    CASE 
-                                    WHEN [NotBlocket].[dbo].[Ads].[Name] = '" + searchstring + @"' THEN 0
-                                    WHEN [NotBlocket].[dbo].[Ads].[Name] LIKE '" + searchstring + @"' + '%' THEN 1
-                                    WHEN [NotBlocket].[dbo].[Ads].[Name] LIKE '%' + '" + searchstring + @"' + '%' THEN 2
-                                    WHEN [NotBlocket].[dbo].[Ads].[Name] LIKE '%' + '" + searchstring + @"' THEN 3
-                                    ELSE 4
-                                    END,
-
                                     [NotBlocket].[dbo].[Ads].[" + sortString + "] ASC";
 
 
 
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
-
-            //dbCommand.Parameters.AddWithValue("@sortstring", sortString);
-            //dbCommand.Parameters.AddWithValue("@searchstring", searchstring);
-
 
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();

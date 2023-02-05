@@ -29,12 +29,6 @@ namespace NotBlocket2.Controllers {
         }
 
         // Functions related to creating accounts
-     
-        [HttpGet]
-        public IActionResult FailedToCreateAccount() {
-            return View();
-        }
-
         [HttpGet]
         public IActionResult CreateAccount() {
             return View();
@@ -47,15 +41,16 @@ namespace NotBlocket2.Controllers {
             int i = 0;
             string error = "";
 
-            i = pm.InsertProfile(p, out error);
-            ViewBag.error = error;
+            if (ModelState.IsValid) {
+                i = pm.InsertProfile(p, out error);
+                ViewBag.error = error;
+                ViewBag.antal = i;
+                return RedirectToAction("GetPersonWithDataSet");
+            }
+            ViewBag.error = "error: " + error;
             ViewBag.antal = i;
-
-            //if i = 1 success, else failed to add profile
-            // TODO change this so you get login view after loging in instead of db view
-            if (i == 1) { return RedirectToAction("GetPersonWithDataSet"); }
-            else { return View("FailedToCreateAccount"); }
-        }
+            return View(p);
+		}
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {
@@ -124,50 +119,6 @@ namespace NotBlocket2.Controllers {
 
 			return View(myModel);
         }
-
-        /*
-		[HttpPost]
-		public IActionResult Filtering(Location loc) {
-			ProfileMethods pm = new ProfileMethods();
-			LocationMethods lm = new LocationMethods();
-			AdMethods am = new AdMethods();
-
-			ViewModelProfileAdsLocation myModel = new ViewModelProfileAdsLocation {
-				ProfileList = pm.GetPersonWithDataSet(out string errormsg),
-				LocationList = lm.GetLocationsWithDataSet(out string errormsg2),
-				AdList = am.GetAdsWithDataSet(out string errormsg3)
-
-			};
-			ViewBag.error = "1: " + errormsg + "2: " + errormsg2 + "3: " + errormsg3;
-            
-			string selectedValue = Request.Form["Location"];
-			ViewBag.location = selectedValue;
-
-
-			return View(myModel);
-		}
-        */
-
-
-
-		/*
-        public ActionResult Create(Image img, IFormFile file) {
-            if (ModelState.IsValid) {
-                if (file != null) {
-                    file.SaveAs(HttpContext.Server.MapPath("~/Images/")
-                                                          + file.FileName);
-                    img.ImagePath = file.FileName;
-                }
-                db.Image.Add(img);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(img);
-        }
-        */
-
-
-
 
 
 	}
