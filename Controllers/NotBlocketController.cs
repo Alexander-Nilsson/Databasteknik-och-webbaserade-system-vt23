@@ -28,6 +28,8 @@ namespace NotBlocket2.Controllers {
             return View(Adlist);
         }
 
+
+
         // Functions related to creating accounts
         [HttpGet]
         public IActionResult CreateAccount() {
@@ -51,6 +53,17 @@ namespace NotBlocket2.Controllers {
             ViewBag.antal = i;
             return View(p);
 		}
+
+        [HttpDelete]
+        public ActionResult DeleteRow(int id) {
+            // Remove the row with the specified ID from the database
+            ProfileMethods pm = new ProfileMethods();
+            string error = "";
+            pm.DeleteProfile(id, out error);
+            ViewBag.error = error;
+
+            return RedirectToAction("GetPersonWithDataSet");
+        }
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {

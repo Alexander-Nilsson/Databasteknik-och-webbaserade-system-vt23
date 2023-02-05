@@ -12,6 +12,28 @@ namespace NotBlocket2.Models {
 
         public ProfileMethods() { }
 
+        public int DeleteProfile(int id, out string errormsg) {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
+            String sqlstring = "DELETE FROM [NotBlocket].[dbo].[Profiles] WHERE Id = @Id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.AddWithValue("@Id", id);
+            try {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "The profile was not deleted from the database."; }
+                return (i);
+            }
+            catch (Exception e) {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally { dbConnection.Close(); }
+        }
+
+
         public int InsertProfile(Profile pd, out string errormsg) {
             //Skapa Sql connection
             SqlConnection dbConnection = new SqlConnection();
