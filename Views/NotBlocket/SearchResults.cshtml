@@ -5,7 +5,7 @@
 }
 <h1>Searchresult</h1>
 
-Search term: @ViewBag.SearchTerm
+Search term: @ViewBag.search
 
 sort: @ViewBag.sort
 
@@ -15,19 +15,19 @@ sort: @ViewBag.sort
     <thead>
         <tr>
             <th>
-                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Id">
+                <a href="SearchResults?search=@ViewBag.search&sort=Id">
                 @Html.DisplayNameFor(model => model.Id)
                 </a>
             </th>
             <th>
-                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Name">
+                <a href="SearchResults?search=@ViewBag.search&sort=Name">
                 @Html.DisplayNameFor(model => model.Name)
                 </a>
             </th>
             <th>
                 @*Enables sorting by price while keeping the searchterm*@
 
-                <a href="SearchResults?searchTerm=@ViewBag.SearchTerm&sort=Price">
+                <a href="SearchResults?search=@ViewBag.search&sort=Price">
                     @Html.DisplayNameFor(model => model.Price)
                 </a>
             </th>

@@ -19,7 +19,7 @@ namespace NotBlocket2.Models {
         public List<Location> GetLocationsWithDataSet(out string errormsg) {
             //Skapa Sql connection
             SqlConnection dbConnection = new SqlConnection();
-            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DatabasLab3;Integrated Security=True";
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
 
             String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Locations]";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
@@ -42,7 +42,7 @@ namespace NotBlocket2.Models {
                         Location pd = new Location();
 
                         pd.Name = myDS.Tables["myPerson"].Rows[i]["Name"].ToString();
-                        pd.Id = Convert.ToInt16(myDS.Tables["myPerson"].Rows[i]["Id"]);
+                        pd.Id = Convert.ToInt16(myDS.Tables["myPerson"].Rows[i]["Location_Id"]);
                         i++;
                         PersonList.Add(pd);
                     }
@@ -62,10 +62,6 @@ namespace NotBlocket2.Models {
         }
     }
 
-    public class ViewModelProfileAdsLocation {
-            public IEnumerable<Profile> ProfileList { get; set; }
-            public IEnumerable<Location> LocationList { get; set; }
-            public IEnumerable<Ad> AdList { get; set; }
-        }
+
     }
 

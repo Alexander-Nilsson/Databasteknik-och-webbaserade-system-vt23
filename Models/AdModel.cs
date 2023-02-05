@@ -19,15 +19,19 @@ namespace NotBlocket2.Models {
 
         public AdMethods() { }
 
-        public List<Ad> GetAdsWithDataSet(out string errormsg) {
+        public List<Ad> GetAdsWithDataSet(out string errormsg, in string filterByCategorystring = null) {
 
             //Skapa Sql connection
             SqlConnection dbConnection = new SqlConnection();
-            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DatabasLab3;Integrated Security=True";
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
 
             String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Ads]";
 
-            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            if(filterByCategorystring != null) {
+				sqlstring = sqlstring + "WHERE [NotBlocket].[dbo].[Ads].[Category] = '" + filterByCategorystring +"'"; };
+
+			errormsg = sqlstring;
+			SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
 
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();
@@ -58,7 +62,7 @@ namespace NotBlocket2.Models {
                     errormsg = "";
                     return AdList;
                 }
-                else { errormsg = "Det hämtas Ingen person"; }
+                else { errormsg = errormsg + "Det hämtas Ingen person"; }
                 return AdList;
             }
 
