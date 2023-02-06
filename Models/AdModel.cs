@@ -125,7 +125,7 @@ namespace NotBlocket2.Models {
                     errormsg = "";
                     return AdList;
                 }
-                else { errormsg = "Det hämtas Ingen person"; }
+                else { errormsg = "There are no results for your search"; }
                 return AdList;
             }
 

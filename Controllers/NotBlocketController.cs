@@ -6,34 +6,19 @@ namespace NotBlocket2.Controllers {
     public class NotBlocketController : Controller {
 
 		[HttpGet]
-		public IActionResult Start(Graphmethods gm) {
+		public IActionResult Start() {
 
             List<string>  locationNames = new List<string>();
             List<int>  ProfileCountPerLocation = new List<int>();
             string errormsg = string.Empty;
 
-            
+            Graphmethods gm = new Graphmethods();
+
             gm.GetLocationsWithDataSet(out locationNames, out ProfileCountPerLocation, out errormsg);
 
-            string LocationNamesString = "[ ";
-            foreach (var i in locationNames) { LocationNamesString = LocationNamesString + '"' + i + '"' + ',' + ' '; }
-            LocationNamesString = LocationNamesString.Substring(0, LocationNamesString.Length - 2);
-            LocationNamesString = LocationNamesString + ']';
-
-            string ProfileCountString = "[ ";
-            foreach (var i in ProfileCountPerLocation) {
-                ProfileCountString = ProfileCountString + i  + ',' + ' '; 
-            }
-            ProfileCountString = ProfileCountString.Substring(0, ProfileCountString.Length - 2);
-            ProfileCountString = ProfileCountString + ']';
-
-            ViewBag.LocationNamesString = LocationNamesString;
-            ViewBag.ProfileCount = ProfileCountString;
-
-            gm.s1 = LocationNamesString;
-            gm.s2 = ProfileCountString;
-
-            return View(gm);
+            ViewBag.LocationNames = locationNames;
+            ViewBag.ProfileCountPerLocation = ProfileCountPerLocation;
+            return View();
         }
 
         [HttpGet]
@@ -41,7 +26,7 @@ namespace NotBlocket2.Controllers {
            
             //Dealing with the null-values
             if (sort == null) { sort = "Name";  }
-            if (search == null) {search = "volvo"; }
+            if (search != null) { 
 
             ViewBag.search = search;
             ViewBag.sort = sort;
@@ -53,6 +38,8 @@ namespace NotBlocket2.Controllers {
             Adlist = pm.GetAdsWithDataSet2(sort, search, out error);
             ViewBag.error = error;
             return View(Adlist);
+            }
+            return RedirectToAction("Start");
         }
 
 
@@ -65,21 +52,23 @@ namespace NotBlocket2.Controllers {
 
         [HttpPost]
 		public IActionResult CreateAccount(Profile p) {
-            //Profile p = new Profile();
             ProfileMethods pm = new ProfileMethods();
             int i = 0;
             string error = "";
 
-            if (ModelState.IsValid) {
-                i = pm.InsertProfile(p, out error);
-                ViewBag.error = error;
+            if (!ModelState.IsValid) {
+                ViewBag.error = "error: " + error;
                 ViewBag.antal = i;
-                return RedirectToAction("GetPersonWithDataSet");
+                return View(p);
             }
-            ViewBag.error = "error: " + error;
+
+            i = pm.InsertProfile(p, out error);
+            ViewBag.error = error;
             ViewBag.antal = i;
-            return View(p);
-		}
+            return RedirectToAction("GetPersonWithDataSet");
+
+        }
+
 
         [HttpGet]
         public IActionResult Deleteprofile(int id) {

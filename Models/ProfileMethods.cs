@@ -52,10 +52,10 @@ namespace NotBlocket2.Models {
         public int UpdateProfile(Profile pd, out string errormsg) {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
-            String sqlstring = "UPDATE [NotBlocket].[dbo].[Profiles] SET Name = @Name, Email = @Email, Password = @Password WHERE Id = @Id";
+            String sqlstring = "UPDATE [NotBlocket].[dbo].[Profiles] SET Name = @Name, Email = @Email, Password = @Password, Location_Id = @Location_Id WHERE Id = @Id";
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = pd.Id;
-            dbCommand.Parameters.Add("@Location_Id", SqlDbType.Int).Value = pd.Id;
+            dbCommand.Parameters.Add("@Location_Id", SqlDbType.Int).Value = pd.Location_Id;
             dbCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 30).Value = pd.Name;
             dbCommand.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = pd.Email;
             dbCommand.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = pd.Password;
@@ -102,7 +102,7 @@ namespace NotBlocket2.Models {
             SqlConnection dbConnection = new SqlConnection();
 
             dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
-            String sqlstring = "INSERT INTO [NotBlocket].[dbo].[Profiles] (Name, Email, Password) VALUES (@Name, @Email, @Password)";
+            String sqlstring = "INSERT INTO [NotBlocket].[dbo].[Profiles] (Name, Email, Password, Location_Id) VALUES (@Name, @Email, @Password, @Location_Id)";
             // For now no way of adding location, 
 
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
@@ -110,6 +110,7 @@ namespace NotBlocket2.Models {
             dbCommand.Parameters.Add("Name", SqlDbType.NVarChar, 30).Value = pd.Name;
             dbCommand.Parameters.Add("Email", SqlDbType.NVarChar, 50).Value = pd.Email;
             dbCommand.Parameters.Add("Password", SqlDbType.NVarChar, 50).Value = pd.Password;
+            dbCommand.Parameters.Add("Location_Id", SqlDbType.Int).Value = pd.Location_Id;
 
             try {
                 dbConnection.Open();

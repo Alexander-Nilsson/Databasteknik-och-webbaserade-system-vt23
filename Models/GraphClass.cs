@@ -5,9 +5,6 @@ namespace NotBlocket2.Models {
 
     public class Graphmethods {
 
-        public string s1 { get; set; }
-        public string s2 { get; set; }
-
         public Graphmethods() { }
 
 
