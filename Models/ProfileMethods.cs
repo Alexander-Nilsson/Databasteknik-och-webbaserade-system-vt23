@@ -12,6 +12,69 @@ namespace NotBlocket2.Models {
 
         public ProfileMethods() { }
 
+        public Profile GetProfileById(int id, out string errormsg) {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
+            String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Profiles] WHERE Id = @Id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = id;
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+            DataSet myDS = new DataSet();
+            try {
+                dbConnection.Open();
+                myAdapter.Fill(myDS, "Profile");
+                int count = myDS.Tables["Profile"].Rows.Count;
+                if (count > 0) {
+                    Profile profile = new Profile();
+                    profile.Name = myDS.Tables["Profile"].Rows[0]["Name"].ToString();
+                    profile.Email = myDS.Tables["Profile"].Rows[0]["Email"].ToString();
+                    profile.Password = myDS.Tables["Profile"].Rows[0]["Password"].ToString();
+                    profile.Location_Id = Convert.ToInt16(myDS.Tables["Profile"].Rows[0]["Location_Id"]);
+                    profile.Id = Convert.ToInt16(myDS.Tables["Profile"].Rows[0]["Id"]);
+                    errormsg = "";
+                    return profile;
+                }
+                else {
+                    errormsg = "No profile was found with the given ID.";
+                    return null;
+                }
+            }
+            catch (Exception e) {
+                errormsg = e.Message;
+                return null;
+            }
+            finally {
+                dbConnection.Close();
+            }
+        }
+
+
+        public int UpdateProfile(Profile pd, out string errormsg) {
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
+            String sqlstring = "UPDATE [NotBlocket].[dbo].[Profiles] SET Name = @Name, Email = @Email, Password = @Password WHERE Id = @Id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = pd.Id;
+            dbCommand.Parameters.Add("@Location_Id", SqlDbType.Int).Value = pd.Id;
+            dbCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 30).Value = pd.Name;
+            dbCommand.Parameters.Add("@Email", SqlDbType.NVarChar, 50).Value = pd.Email;
+            dbCommand.Parameters.Add("@Password", SqlDbType.NVarChar, 50).Value = pd.Password;
+            try {
+                dbConnection.Open();
+                int i = 0;
+                i = dbCommand.ExecuteNonQuery();
+                if (i == 1) { errormsg = ""; }
+                else { errormsg = "The profile was not updated in the database."; }
+                return (i);
+            }
+            catch (Exception e) {
+                errormsg = e.Message;
+                return 0;
+            }
+            finally { dbConnection.Close(); }
+        }
+
+
         public int DeleteProfile(int id, out string errormsg) {
             SqlConnection dbConnection = new SqlConnection();
             dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
@@ -69,9 +132,10 @@ namespace NotBlocket2.Models {
 
             //Skapa Sql connection
             SqlConnection dbConnection = new SqlConnection();
-            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=DatabasLab3;Integrated Security=True";
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
 
             String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Profiles]";
+
             SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
             SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
             DataSet myDS = new DataSet();
@@ -94,6 +158,7 @@ namespace NotBlocket2.Models {
                         pd.Name = myDS.Tables["myPerson"].Rows[i]["Name"].ToString();
                         pd.Email = myDS.Tables["myPerson"].Rows[i]["Email"].ToString();
                         pd.Password = myDS.Tables["myPerson"].Rows[i]["Password"].ToString();
+                        pd.Location_Id = Convert.ToInt16(myDS.Tables["myPerson"].Rows[i]["Location_Id"]);
                         pd.Id = Convert.ToInt16(myDS.Tables["myPerson"].Rows[i]["Id"]);
                         i++;
                         PersonList.Add(pd);
@@ -111,10 +176,6 @@ namespace NotBlocket2.Models {
             }
 
             finally { dbConnection.Close(); }
-
-
-
-
         }
 
 

@@ -1,5 +1,6 @@
 ﻿using System.Data.SqlClient;
 using System.Data;
+using System.ComponentModel.DataAnnotations;
 
 namespace NotBlocket2.Models {
     public class Location {
@@ -9,12 +10,70 @@ namespace NotBlocket2.Models {
 
         public int Id { get; set; }
         public string Name { get; set; }
+    }
 
+    // Create a validator to make sure we only allow locations that are in the location table
+    public class LocationIdValidatorAttribute : ValidationAttribute {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            int locationId = (int)value;
+            string errorMessage;
+            LocationMethods lm = new LocationMethods();
+            List<int> locationIds = lm.GetLocationsWithDataSet(out errorMessage).Select(x => x.Id).ToList();
+
+            if (locationIds.Contains(locationId)) {
+                return ValidationResult.Success;
+            }
+            else {
+                return new ValidationResult("The Location ID is not valid.");
+            }
+        }
     }
 
     public class LocationMethods { 
 
         public LocationMethods() { }
+
+        public List<int> GetAvailableLocationId(out string errormsg) {
+            //Skapa Sql connection
+            SqlConnection dbConnection = new SqlConnection();
+            dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
+
+            String sqlstring = "SELECT Location_Id FROM [NotBlocket].[dbo].[Locations]";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
+            DataSet myDS = new DataSet();
+            List<int> locationIds = new List<int>();
+
+            try {
+                dbConnection.Open();
+
+                myAdapter.Fill(myDS, "myLocations");
+
+                int count = 0;
+                int i = 0;
+                count = myDS.Tables["myLocations"].Rows.Count;
+
+
+                if (count > 0) {
+                    while (i < count) {
+                        locationIds.Add(Convert.ToInt16(myDS.Tables["myLocations"].Rows[i]["Location_Id"]));
+                        i++;
+                    }
+                    errormsg = "";
+                    return locationIds;
+                }
+                else { errormsg = "No locations found"; }
+                return locationIds;
+            }
+
+            catch (Exception e) {
+                errormsg = e.Message;
+                return null;
+            }
+
+            finally { dbConnection.Close(); }
+        }
+
 
         public List<Location> GetLocationsWithDataSet(out string errormsg) {
             //Skapa Sql connection

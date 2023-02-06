@@ -1,12 +1,39 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using NotBlocket2.Models;
 
 namespace NotBlocket2.Controllers {
     public class NotBlocketController : Controller {
 
 		[HttpGet]
-		public IActionResult Start() {
-            return View();
+		public IActionResult Start(Graphmethods gm) {
+
+            List<string>  locationNames = new List<string>();
+            List<int>  ProfileCountPerLocation = new List<int>();
+            string errormsg = string.Empty;
+
+            
+            gm.GetLocationsWithDataSet(out locationNames, out ProfileCountPerLocation, out errormsg);
+
+            string LocationNamesString = "[ ";
+            foreach (var i in locationNames) { LocationNamesString = LocationNamesString + '"' + i + '"' + ',' + ' '; }
+            LocationNamesString = LocationNamesString.Substring(0, LocationNamesString.Length - 2);
+            LocationNamesString = LocationNamesString + ']';
+
+            string ProfileCountString = "[ ";
+            foreach (var i in ProfileCountPerLocation) {
+                ProfileCountString = ProfileCountString + i  + ',' + ' '; 
+            }
+            ProfileCountString = ProfileCountString.Substring(0, ProfileCountString.Length - 2);
+            ProfileCountString = ProfileCountString + ']';
+
+            ViewBag.LocationNamesString = LocationNamesString;
+            ViewBag.ProfileCount = ProfileCountString;
+
+            gm.s1 = LocationNamesString;
+            gm.s2 = ProfileCountString;
+
+            return View(gm);
         }
 
         [HttpGet]
@@ -54,8 +81,8 @@ namespace NotBlocket2.Controllers {
             return View(p);
 		}
 
-        [HttpDelete]
-        public ActionResult DeleteRow(int id) {
+        [HttpGet]
+        public IActionResult Deleteprofile(int id) {
             // Remove the row with the specified ID from the database
             ProfileMethods pm = new ProfileMethods();
             string error = "";
@@ -64,6 +91,46 @@ namespace NotBlocket2.Controllers {
 
             return RedirectToAction("GetPersonWithDataSet");
         }
+
+        [HttpGet]
+        public IActionResult Editprofile(int id) {
+            //Profile p = new Profile();
+            string error = "";
+            ProfileMethods pm = new ProfileMethods();
+            Profile p = pm.GetProfileById(id, out error);
+            return View(p);
+        }
+
+        [HttpPost]
+        public ActionResult Editprofile(Profile pd) {
+
+            
+            if (ModelState.IsValid) {
+                // updt databse and go back to list
+                ProfileMethods pm = new ProfileMethods();
+                string error = "";
+                
+                pm.UpdateProfile(pd, out error);
+                ViewBag.error = error;
+                return RedirectToAction("GetPersonWithDataSet");
+                //return View(pd);
+            }
+   
+
+            return View(pd);
+            //return RedirectToAction("Editprofile");
+        }
+
+        /*
+        public IActionResult Editprofile(Profile p) {
+            ProfileMethods pm = new ProfileMethods();
+            string error = "";
+            pm.UpdateProfile(p, out error);
+            ViewBag.error = error;
+
+            return RedirectToAction("GetPersonWithDataSet");
+        }
+        */
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {
@@ -92,15 +159,11 @@ namespace NotBlocket2.Controllers {
             return View(std);
             
         }
-
-
         
         [HttpGet]
         public IActionResult LoginPage() {
             return View();
         }
-
-
 
 		
 		public IActionResult Filtering() {
@@ -134,5 +197,5 @@ namespace NotBlocket2.Controllers {
         }
 
 
-	}
+    }
 }

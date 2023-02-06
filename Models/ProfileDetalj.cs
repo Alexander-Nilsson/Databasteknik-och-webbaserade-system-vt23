@@ -21,8 +21,9 @@ namespace NotBlocket2.Models {
         [Required, StringLength(60, MinimumLength = 3)]
         public string Password { get; set; }
 
-
+        [LocationIdValidator]
         public int Location_Id { get; set; }
+
         public int Id { get; set; }
 
     }
