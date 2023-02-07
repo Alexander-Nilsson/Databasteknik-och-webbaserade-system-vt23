@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using Umbraco.Core.Composing.CompositionExtensions;
+using Microsoft.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDistributedMemoryCache(); // added to enable sessions from: https://mycodeblock.com/how-to-enable-session-in-asp-net-core-6-and-above/
 builder.Services.AddSession();
+
+
 
 builder.Services.AddSession(options => {
     options.IdleTimeout = TimeSpan.FromMinutes(10);
