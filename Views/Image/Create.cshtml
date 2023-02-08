@@ -1,4 +1,4 @@
-﻿@model NotBlocket2.Models.ImageModel
+﻿@model NotBlocket2.Models.Ad
 
 @{
     ViewData["Title"] = "Create";
@@ -6,7 +6,7 @@
 
 hi
 
-
+@*
 <form asp-controller="Image" asp-action="UploadImage" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label>Choose File:</label>
@@ -17,4 +17,56 @@ hi
         <input type="text" name="Description" />
     </div>
     <button type="submit">Upload Image</button>
+</form>
+
+
+<form asp-controller="Image" asp-action="UploadImage" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label>Choose File:</label>
+        <input type="file" name="File" />
+    </div>
+    <div class="form-group">
+        <label>Name:</label>
+        <input type="text" name="Name" required />
+    </div>
+    <div class="form-group">
+        <label>Description:</label>
+        <input type="text" name="Description" />
+    </div>
+    <div class="form-group">
+        <label>Category:</label>
+        <input type="text" name="Category" />
+    </div>
+    <div class="form-group">
+        <label>Price:</label>
+        <input type="number" name="Price" required />
+    </div>
+    <button type="submit">Upload Image</button>
+</form>
+*@
+
+<form asp-controller="Image" asp-action="UploadImage" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="File">Choose File:</label>
+        <input type="file" id="model.File" name="File" required />
+    </div>
+    <div class="form-group">
+        <label for="Name">Name:</label>
+        <input type="text" id="Name" asp-for=Name required />
+    </div>
+    <div class="form-group">
+        <label for="Description">Description:</label>
+        <input type="text" id="Description" asp-for=Description />
+    </div>
+    <div class="form-group">
+        <label for="Category">Category:</label>
+        <input type="text" id="Category" asp-for=Category />
+    </div>
+    <div class="form-group">
+        <label for="Price">Price:</label>
+        <input type="number" id="Price" asp-for=Price required />
+    </div>
+    <div class="form-group">
+        <button type="submit">Upload Image</button>
+    </div>
 </form>

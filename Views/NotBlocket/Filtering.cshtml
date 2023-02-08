@@ -2,8 +2,8 @@
 
 
 <h2>Filtering</h2>
-@*
 @ViewBag.error
+@*
 @ViewBag.location
 
 <div class="row">
@@ -61,11 +61,15 @@
 	<tr>
 		<th>Name</th>
 		<th>Price</th>
+		<th>Image</th>
+
 	</tr>
 	@foreach (NotBlocket2.Models.Ad Ad in Model.FilterdAdList) {
 		<tr>
 			<td>@Ad.Name</td>
 			<td>@Ad.Price</td>
+			<td><img src="@Ad.ImagePath" alt="No Image" style="max-width:250px; max-height:150px;"></td>
+		
 		</tr>
 	}
 

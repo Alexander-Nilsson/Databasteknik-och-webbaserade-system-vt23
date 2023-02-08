@@ -110,17 +110,6 @@ namespace NotBlocket2.Controllers {
             //return RedirectToAction("Editprofile");
         }
 
-        /*
-        public IActionResult Editprofile(Profile p) {
-            ProfileMethods pm = new ProfileMethods();
-            string error = "";
-            pm.UpdateProfile(p, out error);
-            ViewBag.error = error;
-
-            return RedirectToAction("GetPersonWithDataSet");
-        }
-        */
-
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {
             List<Profile> Profilelist = new List<Profile>();
@@ -184,8 +173,6 @@ namespace NotBlocket2.Controllers {
 
 			return View(myModel);
         }
-
-
-
+    
     }
 }

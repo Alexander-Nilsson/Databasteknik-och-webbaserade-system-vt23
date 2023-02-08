@@ -8,19 +8,20 @@ using System.Threading.Tasks;
 
 namespace NotBlocket2.Controllers {
 
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
     public class ImageController : Controller {
 
         public IActionResult Create() {
             return View();
         }
 
-
-
-
+        private bool IsValidImageFormat(string fileName) {
+            var extension = Path.GetExtension(fileName).ToLowerInvariant();
+            return extension == ".jpg" || extension == ".jpeg" || extension == ".png";
+        }
 
         [HttpPost]
-        public async Task<IActionResult> UploadImage(IFormFile file) {
+        public async Task<IActionResult> UploadImage(IFormFile file, Ad ad) {
             // Check if the file is null
             if (file == null || file.Length == 0) {
                 return BadRequest("File is empty or missing");
@@ -32,29 +33,49 @@ namespace NotBlocket2.Controllers {
             await stream.ReadAsync(fileBytes, 0, (int)file.Length);
 
             // Validate the file format
-            if (!IsValidImageFormat(file.FileName)) {
+            /*if (!IsValidImageFormat(file.FileName)) {
                 return BadRequest("Invalid file format");
             }
+            */
+            // Generate a unique file name
+            var fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}_{new Random().Next(1000, 9999)}_{file.FileName}";
 
             // Save the file to the file system
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", file.FileName);
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
             using (var fileStream = new FileStream(filePath, FileMode.Create)) {
                 await fileStream.WriteAsync(fileBytes);
             }
 
-            // Save the file information to the database
-            // ...
+            // Save the file location information to the database
 
-            return Ok();
-        }
+            var viewModel = new ImageModel {
+                ImagePath = Path.Combine("/images", fileName)
+            };
+            
+            
+            ad.ImagePath = Path.Combine("/images", fileName);
+            string errormsg = "";
+            AdMethods am = new AdMethods();
+            am.InsertAd(ad, out errormsg);
+            ViewBag.error = errormsg;
 
-        private bool IsValidImageFormat(string fileName) {
-            var extension = Path.GetExtension(fileName).ToLowerInvariant();
-            return extension == ".jpg" || extension == ".jpeg" || extension == ".png";
-        }
+			//ViewBag.ImagePath = ad.ImagePath;
+			//return Ok(ad.Name);
+			//return View(viewModel);
+			return RedirectToAction("Filtering","NotBlocket");
+
+
+
+
+		}
+
+        
+    }
+
+
     }
 
 
 
-    }
+    
 
