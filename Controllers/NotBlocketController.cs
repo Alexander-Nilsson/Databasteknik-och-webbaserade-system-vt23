@@ -81,7 +81,18 @@ namespace NotBlocket2.Controllers {
             return RedirectToAction("GetPersonWithDataSet");
         }
 
-        [HttpGet]
+		[HttpGet]
+		public IActionResult DeleteAd(int id) {
+			// Remove the row with the specified ID from the database
+			AdMethods am = new AdMethods();
+			string error = "";
+			am.DeleteAd(id, out error);
+			ViewBag.error = error;
+
+			return RedirectToAction("Filtering");
+		}
+
+		[HttpGet]
         public IActionResult Editprofile(int id) {
             //Profile p = new Profile();
             string error = "";
@@ -89,24 +100,57 @@ namespace NotBlocket2.Controllers {
             Profile p = pm.GetProfileById(id, out error);
             return View(p);
         }
+		[HttpPost]
+		public ActionResult Editprofile(Profile pd) {
+			if (ModelState.IsValid) {
+				// updt databse and go back to list
+				ProfileMethods pm = new ProfileMethods();
+				string error = "";
 
-        [HttpPost]
-        public ActionResult Editprofile(Profile pd) {
+				pm.UpdateProfile(pd, out error);
+				ViewBag.error = error;
+				return RedirectToAction("GetPersonWithDataSet");
+				//return View(pd);
+			}
+			return View(pd);
+			//return RedirectToAction("Editprofile");
+		}
 
-            
-            if (ModelState.IsValid) {
-                // updt databse and go back to list
-                ProfileMethods pm = new ProfileMethods();
-                string error = "";
-                
-                pm.UpdateProfile(pd, out error);
-                ViewBag.error = error;
-                return RedirectToAction("GetPersonWithDataSet");
-                //return View(pd);
-            }
-   
+		[HttpGet]
+		public IActionResult EditAd(int Id) {
+			//Profile p = new Profile();
+			string error = "";
+			AdMethods pm = new AdMethods();
+			Ad ad = pm.GetAdById(Id, out error);
+            ViewBag.id = Id;
 
-            return View(pd);
+            /*
+            ViewBag.Description = ad.Description;
+            ViewBag.category = ad.Category;
+            ViewBag.id = ad.Id;
+            ViewBag.price = ad.Price;
+            ViewBag.Profile_id = ad.Profile_Id;
+            */
+
+            ViewBag.error = error;
+			return View(ad);
+		}
+
+		[HttpPost]
+	    public ActionResult EditAd(Ad pd) {
+			if (ModelState.IsValid) {
+				// updt databse and go back to list
+				AdMethods pm = new AdMethods();
+				string error = "";
+
+				pm.UpdateAd(pd, out error);
+				ViewBag.error = error;
+				return RedirectToAction("Filtering");
+				//return View(pd);
+			}
+
+
+				return View(pd);
             //return RedirectToAction("Editprofile");
         }
 

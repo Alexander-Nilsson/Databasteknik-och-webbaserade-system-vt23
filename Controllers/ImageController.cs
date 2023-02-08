@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace NotBlocket2.Controllers {
 
-    //[Route("api/[controller]")]
     public class ImageController : Controller {
 
         public IActionResult Create() {
@@ -33,10 +32,10 @@ namespace NotBlocket2.Controllers {
             await stream.ReadAsync(fileBytes, 0, (int)file.Length);
 
             // Validate the file format
-            /*if (!IsValidImageFormat(file.FileName)) {
+            if (!IsValidImageFormat(file.FileName)) {
                 return BadRequest("Invalid file format");
             }
-            */
+            
             // Generate a unique file name
             var fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}_{new Random().Next(1000, 9999)}_{file.FileName}";
 
@@ -45,27 +44,17 @@ namespace NotBlocket2.Controllers {
             using (var fileStream = new FileStream(filePath, FileMode.Create)) {
                 await fileStream.WriteAsync(fileBytes);
             }
-
-            // Save the file location information to the database
-
-            var viewModel = new ImageModel {
-                ImagePath = Path.Combine("/images", fileName)
-            };
             
-            
+            //add path to ad
             ad.ImagePath = Path.Combine("/images", fileName);
-            string errormsg = "";
+
+			// Save the information to the database
+			string errormsg = "";
             AdMethods am = new AdMethods();
             am.InsertAd(ad, out errormsg);
             ViewBag.error = errormsg;
 
-			//ViewBag.ImagePath = ad.ImagePath;
-			//return Ok(ad.Name);
-			//return View(viewModel);
 			return RedirectToAction("Filtering","NotBlocket");
-
-
-
 
 		}
 
