@@ -37,19 +37,34 @@ namespace NotBlocket2.Models {
 			dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = id;
 			SqlDataAdapter myAdapter = new SqlDataAdapter(dbCommand);
 			DataSet myDS = new DataSet();
+
 			try {
 				dbConnection.Open();
-				myAdapter.Fill(myDS, "Profile");
-				int count = myDS.Tables["Profile"].Rows.Count;
+				myAdapter.Fill(myDS, "Ad");
+				int count = myDS.Tables["Ad"].Rows.Count;
 				if (count > 0) {
 					Ad profile = new Ad();
-					profile.Name = myDS.Tables["Profile"].Rows[0]["Name"].ToString();
-					profile.Description = myDS.Tables["Profile"].Rows[0]["Description"].ToString();
-					profile.ImagePath = myDS.Tables["Profile"].Rows[0]["ImagePath"].ToString();
-					profile.Category = myDS.Tables["Profile"].Rows[0]["Category"].ToString();
-					profile.Price = Convert.ToInt32(myDS.Tables["Profile"].Rows[0]["Price"]);
-					profile.Profile_Id = Convert.ToInt16(myDS.Tables["Profile"].Rows[0]["Profile_Id"]);
-					errormsg = "";
+
+					profile.Name = myDS.Tables["Ad"].Rows[0]["Name"].ToString();
+					
+                    if (myDS.Tables["Ad"].Rows[0]["Description"] != DBNull.Value) {
+                        profile.Description = myDS.Tables["Ad"].Rows[0]["Description"].ToString();
+                    }
+
+                    if (myDS.Tables["Ad"].Rows[0]["Category"] != DBNull.Value) {
+                        profile.Category = myDS.Tables["Ad"].Rows[0]["Category"].ToString();
+                    }
+                    profile.Price = Convert.ToInt32(myDS.Tables["Ad"].Rows[0]["Price"]);
+					
+                    if (myDS.Tables["Ad"].Rows[0]["Profile_Id"] != DBNull.Value) {
+                        profile.Profile_Id = Convert.ToInt32(myDS.Tables["Ad"].Rows[0]["Profile_Id"]);
+                    }
+
+                    if (myDS.Tables["Ad"].Rows[0]["ImagePath"] != DBNull.Value) {
+                        profile.ImagePath = myDS.Tables["Ad"].Rows[0]["ImagePath"].ToString();
+                    }
+
+                    errormsg = "";
 					return profile;
 				}
 				else {
@@ -72,6 +87,7 @@ namespace NotBlocket2.Models {
 			dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
 			String sqlstring = "UPDATE [NotBlocket].[dbo].[Profiles] SET Name = @Name, Email = @Email, Password = @Password, Location_Id = @Location_Id WHERE Id = @Id";
 			SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+
 			dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = pd.Id;
 			dbCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 30).Value = pd.Name;
 			dbCommand.Parameters.Add("@Description", SqlDbType.NVarChar, 50).Value = pd.Description;

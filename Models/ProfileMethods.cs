@@ -30,6 +30,7 @@ namespace NotBlocket2.Models {
                     profile.Email = myDS.Tables["Profile"].Rows[0]["Email"].ToString();
                     profile.Password = myDS.Tables["Profile"].Rows[0]["Password"].ToString();
                     profile.Location_Id = Convert.ToInt16(myDS.Tables["Profile"].Rows[0]["Location_Id"]);
+
                     profile.Id = Convert.ToInt16(myDS.Tables["Profile"].Rows[0]["Id"]);
                     errormsg = "";
                     return profile;

@@ -100,6 +100,7 @@ namespace NotBlocket2.Controllers {
             Profile p = pm.GetProfileById(id, out error);
             return View(p);
         }
+
 		[HttpPost]
 		public ActionResult Editprofile(Profile pd) {
 			if (ModelState.IsValid) {
@@ -118,16 +119,19 @@ namespace NotBlocket2.Controllers {
 
 		[HttpGet]
 		public IActionResult EditAd(int Id) {
-			//Profile p = new Profile();
 			string error = "";
 			AdMethods pm = new AdMethods();
 			Ad ad = pm.GetAdById(Id, out error);
-            ViewBag.id = Id;
-
             ViewBag.error = error;
-			return View(ad);
+            if (ad != null) {
+                return View(ad);
+            }
+            else {
+                return View(ad);
+            }
 		}
 
+        /*
 		[HttpPost]
 	    public ActionResult EditAd(Ad pd) {
 			if (ModelState.IsValid) {
@@ -145,6 +149,7 @@ namespace NotBlocket2.Controllers {
 				return View(pd);
             //return RedirectToAction("Editprofile");
         }
+        */
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {
