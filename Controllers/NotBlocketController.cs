@@ -124,14 +124,6 @@ namespace NotBlocket2.Controllers {
 			Ad ad = pm.GetAdById(Id, out error);
             ViewBag.id = Id;
 
-            /*
-            ViewBag.Description = ad.Description;
-            ViewBag.category = ad.Category;
-            ViewBag.id = ad.Id;
-            ViewBag.price = ad.Price;
-            ViewBag.Profile_id = ad.Profile_Id;
-            */
-
             ViewBag.error = error;
 			return View(ad);
 		}

@@ -11,10 +11,10 @@ id; @ViewBag.id
 
 @*
            adname @ViewBag.AdName
-           description @ViewBag.Description 
-           category @ViewBag.category 
-           
-           price @ViewBag.price 
+           description @ViewBag.Description
+           category @ViewBag.category
+
+           price @ViewBag.price
           profile  @ViewBag.Profile_id *@
 
 <form asp-controller="Image" asp-action="UploadImage" method="post" enctype="multipart/form-data">
@@ -32,15 +32,15 @@ id; @ViewBag.id
     </div>
     <div class="form-group">
         <label for="Category">Category:</label>
-        <input type="text" id="Category"  asp-for=Category />
+        <input type="text" id="Category" asp-for=Category />
     </div>
     <div class="form-group">
         <label for="Price">Price:</label>
-        <input type="number" id="Price"  asp-for=Price required />
+        <input type="number" id="Price" asp-for=Price required />
     </div>
     <div class="form-group">
         <label for="Profile_Id">Profile_Id:</label>
-        <input type="number" id="Profile_Id"  asp-for=Profile_Id />
+        <input type="number" id="Profile_Id" asp-for=Profile_Id />
     </div>
     <div class="form-group">
         <label for="ImagePath">Old ImagePath:</label>

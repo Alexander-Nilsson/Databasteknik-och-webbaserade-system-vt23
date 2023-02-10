@@ -44,7 +44,8 @@ namespace NotBlocket2.Controllers {
             using (var fileStream = new FileStream(filePath, FileMode.Create)) {
                 await fileStream.WriteAsync(fileBytes);
             }
-            
+
+            //Ad ad = new Ad();
             //add path to ad
             ad.ImagePath = Path.Combine("/images", fileName);
 
@@ -58,7 +59,12 @@ namespace NotBlocket2.Controllers {
 
 		}
 
-        
+
+        [HttpGet]
+        public async Task<IActionResult> CreateAd() {
+            return View();
+        }
+
     }
 
 
