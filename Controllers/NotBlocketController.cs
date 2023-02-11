@@ -131,25 +131,54 @@ namespace NotBlocket2.Controllers {
             }
 		}
 
-        /*
+        
 		[HttpPost]
-	    public ActionResult EditAd(Ad pd) {
-			if (ModelState.IsValid) {
-				// updt databse and go back to list
-				AdMethods pm = new AdMethods();
-				string error = "";
+	    public async Task<ActionResult> EditAdAsync(IFormFile file, Ad ad) {
 
-				pm.UpdateAd(pd, out error);
-				ViewBag.error = error;
-				return RedirectToAction("Filtering");
-				//return View(pd);
+			AdMethods pm = new AdMethods();
+			string error = "";
+
+
+			//if there is a image file->updt image file
+			if (file != null || file.Length == 0) {
+				// Check if the file is null
+
+				// Get the file stream and read its contents
+				var stream = file.OpenReadStream();
+				var fileBytes = new byte[file.Length];
+				await stream.ReadAsync(fileBytes, 0, (int)file.Length);
+
+                /*
+				// Validate the file format
+				if (!IsValidImageFormat(file.FileName)) {
+					return BadRequest("Invalid file format");
+				}
+                */
+
+				// Generate a unique file name
+				var fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}_{new Random().Next(1000, 9999)}_{file.FileName}";
+
+				// Save the file to the file system
+				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
+				using (var fileStream = new FileStream(filePath, FileMode.Create)) {
+					await fileStream.WriteAsync(fileBytes);
+				}
+
+				//Ad ad = new Ad();
+				//add path to ad
+				ad.ImagePath = Path.Combine("/images", fileName);
+
 			}
+                //if no then->then
+                // updt databse and go back to list
 
 
-				return View(pd);
-            //return RedirectToAction("Editprofile");
+             pm.UpdateAd(ad, out error);
+             ViewBag.errorx = error;
+             return RedirectToAction("Filtering", "NotBlocket");
+            
         }
-        */
+        
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {

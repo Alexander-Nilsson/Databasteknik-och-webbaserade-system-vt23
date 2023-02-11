@@ -3,40 +3,7 @@
 
 <h2>Filtering</h2>
 @ViewBag.error
-@*
-@ViewBag.location
-
-<div class="row">
-	<div class="form-group col-md-4">
-		<form asp-action="Filtering">
-			<div class="form-group">
-				<select class="form-control" id="Location" name="Location">
-					@foreach (NotBlocket2.Models.Ad Ad in Model.AdList) {
-						<option value="@Ad.Id ">@Ad.Category</option>
-					}
-				</select>
-			</div>
-		</form>
-	</div>
-</div>
-
-<div class="row">
-	<div class="form-group col-md-4">
-		<form asp-action="Filtering" method="post">
-			<div class="form-group">
-				<select class="form-control" id="Location" name="Location">
-					@foreach (NotBlocket2.Models.Location loc in Model.LocationList) {
-						<option value="@loc.Id ">@loc.Name</option>
-					}
-				</select>
-			</div>
-			<div class="form-group">
-				<input type="submit" value="Filtering" class="btn btn-default" />
-			</div>
-		</form>
-	</div>
-</div>
-*@
+@ViewBag.errorx
 
 <div class="row">
 	<div class="form-group col-md-4">
@@ -61,13 +28,18 @@
 	<tr>
 		<th>Name</th>
 		<th>Price</th>
+		<th>Description</th>
+		<th>Category</th>
 		<th>Image</th>
+		<th></th>
 
 	</tr>
 	@foreach (NotBlocket2.Models.Ad Ad in Model.FilterdAdList) {
 		<tr>
 			<td>@Ad.Name</td>
 			<td>@Ad.Price</td>
+			<td>@Ad.Description</td>
+			<td>@Ad.Category</td>
 			<td><img src="@Ad.ImagePath" alt="No Image" style="max-width:250px; max-height:150px;"></td>
 		    <td>
 				<button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("EditAd", "NotBlocket", new { id = Ad.Id })'">Edit</button>
