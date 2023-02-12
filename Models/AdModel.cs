@@ -2,9 +2,8 @@
 using System.Data;
 using NotBlocket2.Models;
 using Microsoft.Build.Framework;
-using System.ComponentModel.DataAnnotations;
+
 using Microsoft.AspNetCore.Mvc;
-//using System.ComponentModel.DataAnnotations;
 
 namespace NotBlocket2.Models {
     public class Ad {
@@ -13,13 +12,13 @@ namespace NotBlocket2.Models {
 
         public int Id { get; set; }
         //Publika egenskaper
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public string Name { get; set; }
         public string? Description { get; set; }
         public string? Category { get; set; }
 
 
-        [System.ComponentModel.DataAnnotations.Required]
+        [Required]
         public int Price { get; set; }
 
         public int? Profile_Id { get; set; }
@@ -37,10 +36,10 @@ namespace NotBlocket2.Models {
 			return extension == ".jpg" || extension == ".jpeg" || extension == ".png";
 		}
 
-		public async Task<string> ImagePathAsync(IFormFile file, string errormsg) {
+        public static async Task<string> SaveFileAsync(IFormFile file) {
             // Check if the file is null
             if (file == null || file.Length == 0) {
-                return errormsg = "File is empty or missing";
+                return "File is empty or missing";
             }
 
             // Get the file stream and read its contents
@@ -48,9 +47,10 @@ namespace NotBlocket2.Models {
             var fileBytes = new byte[file.Length];
             await stream.ReadAsync(fileBytes, 0, (int)file.Length);
 
+            AdMethods am = new AdMethods();
             // Validate the file format
-            if (!IsValidImageFormat(file.FileName)) {
-                return errormsg = "Invalid file format";
+            if (!am.IsValidImageFormat(file.FileName)) {
+                return "Invalid file format";
             }
 
             // Generate a unique file name
@@ -62,15 +62,11 @@ namespace NotBlocket2.Models {
                 await fileStream.WriteAsync(fileBytes);
             }
 
-            //Ad ad = new Ad();
-            //add path to ad
-            string ImagePath = "";
-
-			return ImagePath = Path.Combine("/images", fileName);
+            return Path.Combine("/images", fileName);
         }
 
 
-			public Ad GetAdById(int id, out string errormsg) {
+        public Ad GetAdById(int id, out string errormsg) {
 			SqlConnection dbConnection = new SqlConnection();
 			dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True";
 			String sqlstring = "SELECT * FROM [NotBlocket].[dbo].[Ads] WHERE Id = @Id";
@@ -126,17 +122,21 @@ namespace NotBlocket2.Models {
 		public int UpdateAd(Ad pd, out string errormsg) {
 			SqlConnection dbConnection = new SqlConnection();
 			dbConnection.ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=NotBlocket;Integrated Security=True;Pooling=False";
-			String sqlstring = "UPDATE [NotBlocket].[dbo].[Profiles] SET Name = @Name, Email = @Email, Password = @Password, Location_Id = @Location_Id WHERE Id = @Id";
-			SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection);
+            //String sqlstring = "UPDATE [NotBlocket].[dbo].[Ads] SET Name = @Name WHERE Id = @Id";
+            String sqlstring = "UPDATE [NotBlocket].[dbo].[Ads] SET Name = @Name, Description = @Description, Category = @Category, Price = @Price, Profile_Id = @Profile_Id  WHERE Id = @Id";
+            SqlCommand dbCommand = new SqlCommand(sqlstring, dbConnection); 
 
-			dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = pd.Id;
+            
+            dbCommand.Parameters.Add("@Id", SqlDbType.Int).Value = pd.Id;
 			dbCommand.Parameters.Add("@Name", SqlDbType.NVarChar, 30).Value = pd.Name;
-			dbCommand.Parameters.Add("@Description", SqlDbType.NVarChar, 50).Value = pd.Description;
-			dbCommand.Parameters.Add("@Category", SqlDbType.NVarChar, 30).Value = pd.Category;
+			dbCommand.Parameters.Add("@Description", SqlDbType.NVarChar, 50).Value = pd.Description ?? (object)DBNull.Value; 
+			dbCommand.Parameters.Add("@Category", SqlDbType.NVarChar, 30).Value = pd.Category ?? (object)DBNull.Value;
 			dbCommand.Parameters.Add("@Price", SqlDbType.Int).Value = pd.Price;
-			dbCommand.Parameters.Add("@Profile_Id", SqlDbType.Int).Value = pd.Profile_Id;
-			dbCommand.Parameters.Add("@ImagePath", SqlDbType.NVarChar, 50).Value = pd.ImagePath;
-			try {
+			dbCommand.Parameters.Add("@Profile_Id", SqlDbType.Int).Value = pd.Profile_Id ?? (object)DBNull.Value;
+			//dbCommand.Parameters.Add("@ImagePath", SqlDbType.NVarChar, 50).Value = pd.ImagePath ?? (object)DBNull.Value;
+			
+
+            try {
 				dbConnection.Open();
 				int i = 0;
 				i = dbCommand.ExecuteNonQuery();

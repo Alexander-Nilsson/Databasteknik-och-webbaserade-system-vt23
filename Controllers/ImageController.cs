@@ -24,6 +24,7 @@ namespace NotBlocket2.Controllers {
             return View();
         }
 
+
         [HttpPost]
         public async Task<IActionResult> UploadImage(IFormFile file, Ad ad) {
             // Check if the file is null

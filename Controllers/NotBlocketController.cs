@@ -1,15 +1,16 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using NotBlocket2.Models;
+using Umbraco.Core.Models;
 
 namespace NotBlocket2.Controllers {
     public class NotBlocketController : Controller {
 
-		[HttpGet]
-		public IActionResult Start() {
+        [HttpGet]
+        public IActionResult Start() {
 
-            List<string>  locationNames = new List<string>();
-            List<int>  ProfileCountPerLocation = new List<int>();
+            List<string> locationNames = new List<string>();
+            List<int> ProfileCountPerLocation = new List<int>();
             string errormsg = string.Empty;
 
             Graphmethods gm = new Graphmethods();
@@ -23,21 +24,21 @@ namespace NotBlocket2.Controllers {
 
         [HttpGet]
         public IActionResult SearchResults(string search, string sort) {
-           
+
             //Dealing with the null-values
-            if (sort == null) { sort = "Name";  }
-            if (search != null) { 
+            if (sort == null) { sort = "Name"; }
+            if (search != null) {
 
-            ViewBag.search = search;
-            ViewBag.sort = sort;
+                ViewBag.search = search;
+                ViewBag.sort = sort;
 
-            //Get the Ad list
-            List<Ad> Adlist = new List<Ad>();
-            AdMethods pm = new AdMethods();
-            string error = "";
-            Adlist = pm.GetAdsWithDataSet2(sort, search, out error);
-            ViewBag.error = error;
-            return View(Adlist);
+                //Get the Ad list
+                List<Ad> Adlist = new List<Ad>();
+                AdMethods pm = new AdMethods();
+                string error = "";
+                Adlist = pm.GetAdsWithDataSet2(sort, search, out error);
+                ViewBag.error = error;
+                return View(Adlist);
             }
             return RedirectToAction("Start");
         }
@@ -51,7 +52,7 @@ namespace NotBlocket2.Controllers {
         }
 
         [HttpPost]
-		public IActionResult CreateAccount(Profile p) {
+        public IActionResult CreateAccount(Profile p) {
             ProfileMethods pm = new ProfileMethods();
             int i = 0;
             string error = "";
@@ -81,18 +82,18 @@ namespace NotBlocket2.Controllers {
             return RedirectToAction("GetPersonWithDataSet");
         }
 
-		[HttpGet]
-		public IActionResult DeleteAd(int id) {
-			// Remove the row with the specified ID from the database
-			AdMethods am = new AdMethods();
-			string error = "";
-			am.DeleteAd(id, out error);
-			ViewBag.error = error;
+        [HttpGet]
+        public IActionResult DeleteAd(int id) {
+            // Remove the row with the specified ID from the database
+            AdMethods am = new AdMethods();
+            string error = "";
+            am.DeleteAd(id, out error);
+            ViewBag.error = error;
 
-			return RedirectToAction("Filtering");
-		}
+            return RedirectToAction("Filtering");
+        }
 
-		[HttpGet]
+        [HttpGet]
         public IActionResult Editprofile(int id) {
             //Profile p = new Profile();
             string error = "";
@@ -101,27 +102,28 @@ namespace NotBlocket2.Controllers {
             return View(p);
         }
 
-		[HttpPost]
-		public ActionResult Editprofile(Profile pd) {
-			if (ModelState.IsValid) {
-				// updt databse and go back to list
-				ProfileMethods pm = new ProfileMethods();
-				string error = "";
+        [HttpPost]
+        public ActionResult Editprofile(Profile pd) {
+            if (ModelState.IsValid) {
+                // updt databse and go back to list
+                ProfileMethods pm = new ProfileMethods();
+                string error = "";
 
-				pm.UpdateProfile(pd, out error);
-				ViewBag.error = error;
-				return RedirectToAction("GetPersonWithDataSet");
-				//return View(pd);
-			}
-			return View(pd);
-			//return RedirectToAction("Editprofile");
-		}
+                pm.UpdateProfile(pd, out error);
+                ViewBag.error = error;
+                return RedirectToAction("GetPersonWithDataSet");
+                //return View(pd);
+            }
+            return View(pd);
+            //return RedirectToAction("Editprofile");
+        }
 
-		[HttpGet]
-		public IActionResult EditAd(int Id) {
-			string error = "";
-			AdMethods pm = new AdMethods();
-			Ad ad = pm.GetAdById(Id, out error);
+        [HttpGet]
+        public IActionResult EditAd(int Id) {
+            string error = "";
+
+            AdMethods pm = new AdMethods();
+            Ad ad = pm.GetAdById(Id, out error);
             ViewBag.error = error;
             if (ad != null) {
                 return View(ad);
@@ -129,56 +131,62 @@ namespace NotBlocket2.Controllers {
             else {
                 return View(ad);
             }
-		}
-
-        
-		[HttpPost]
-	    public async Task<ActionResult> EditAdAsync(IFormFile file, Ad ad) {
-
-			AdMethods pm = new AdMethods();
-			string error = "";
-
-
-			//if there is a image file->updt image file
-			if (file != null || file.Length == 0) {
-				// Check if the file is null
-
-				// Get the file stream and read its contents
-				var stream = file.OpenReadStream();
-				var fileBytes = new byte[file.Length];
-				await stream.ReadAsync(fileBytes, 0, (int)file.Length);
-
-                /*
-				// Validate the file format
-				if (!IsValidImageFormat(file.FileName)) {
-					return BadRequest("Invalid file format");
-				}
-                */
-
-				// Generate a unique file name
-				var fileName = $"{DateTime.Now.ToString("yyyyMMddhhmmss")}_{new Random().Next(1000, 9999)}_{file.FileName}";
-
-				// Save the file to the file system
-				var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", fileName);
-				using (var fileStream = new FileStream(filePath, FileMode.Create)) {
-					await fileStream.WriteAsync(fileBytes);
-				}
-
-				//Ad ad = new Ad();
-				//add path to ad
-				ad.ImagePath = Path.Combine("/images", fileName);
-
-			}
-                //if no then->then
-                // updt databse and go back to list
-
-
-             pm.UpdateAd(ad, out error);
-             ViewBag.errorx = error;
-             return RedirectToAction("Filtering", "NotBlocket");
-            
         }
         
+        /*
+        [HttpPost]
+        public async Task<IActionResult> EditAdWithFile(Ad ad, IFormFile file) {
+            AdMethods am = new AdMethods();
+            string error = "";
+            string errorMessage = "";
+
+            
+            if (ModelState.IsValid) {
+                try {
+                    // Save the file
+                    //AdMethods am = new AdMethods();
+                    string imagePath = await AdMethods.SaveFileAsync(file);
+
+                    // Update the ad with the file information
+                    ad.ImagePath = imagePath;
+                }
+                catch (Exception ex) {
+                    errorMessage = ex.Message;
+                }
+            }
+            am.UpdateAd(ad, out error);
+            ViewBag.error = errorMessage + error;
+            //return View(ad);
+            return RedirectToAction("Filtering");
+            //return RedirectToAction("EditAd");
+        }
+        */
+
+        [HttpPost]
+        public IActionResult EditAd(Ad ad) {
+            string error = "";
+            if (ModelState.IsValid) {
+                // updt databse and go back to list
+                AdMethods pm = new AdMethods();
+                
+
+                pm.UpdateAd(ad, out error);
+                ViewBag.error = error;
+                return RedirectToAction("Filtering");
+                //return View(ad);
+            }
+
+            var errorMessage = "Validation errors: ";
+            foreach (var errorr in ModelState.Values) {
+                if (errorr.Errors.Count > 0) {
+                    errorMessage += errorr.Errors[0].ErrorMessage + "; ";
+                }
+            }
+            ViewBag.error = error + errorMessage;
+            return View(ad);
+        }
+
+
 
         [HttpGet]
         public ActionResult GetPersonWithDataSet() {
