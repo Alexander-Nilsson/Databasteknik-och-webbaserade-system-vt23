@@ -66,7 +66,33 @@ namespace NotBlocket2.Controllers {
             i = pm.InsertProfile(p, out error);
             ViewBag.error = error;
             ViewBag.antal = i;
-            return RedirectToAction("GetPersonWithDataSet");
+            return RedirectToAction("ProfilesView");
+
+        }
+
+        [HttpGet]
+        public IActionResult CreateAd() {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateAd(Ad ad, IFormFile file) {
+            AdMethods am = new AdMethods();
+            int i = 0;
+            string error = "";
+
+            if (!ModelState.IsValid) {
+                ViewBag.error = "error: " + error;
+                ViewBag.antal = i;
+                return View();
+            }
+
+            ad.ImagePath = await AdMethods.SaveFileAsync(file);
+
+            am.InsertAd(ad, out error);
+            ViewBag.error = error;
+            ViewBag.antal = i;
+            return RedirectToAction("AdsView");
 
         }
 
@@ -79,7 +105,7 @@ namespace NotBlocket2.Controllers {
             pm.DeleteProfile(id, out error);
             ViewBag.error = error;
 
-            return RedirectToAction("GetPersonWithDataSet");
+            return RedirectToAction("ProfilesView");
         }
 
         [HttpGet]
@@ -90,7 +116,7 @@ namespace NotBlocket2.Controllers {
             am.DeleteAd(id, out error);
             ViewBag.error = error;
 
-            return RedirectToAction("Filtering");
+            return RedirectToAction("AdsView");
         }
 
         [HttpGet]
@@ -111,7 +137,7 @@ namespace NotBlocket2.Controllers {
 
                 pm.UpdateProfile(pd, out error);
                 ViewBag.error = error;
-                return RedirectToAction("GetPersonWithDataSet");
+                return RedirectToAction("ProfilesView");
                 //return View(pd);
             }
             return View(pd);
@@ -132,7 +158,7 @@ namespace NotBlocket2.Controllers {
                 return View(ad);
             }
         }
-        
+
         /*
         [HttpPost]
         public async Task<IActionResult> EditAdWithFile(Ad ad, IFormFile file) {
@@ -157,7 +183,7 @@ namespace NotBlocket2.Controllers {
             am.UpdateAd(ad, out error);
             ViewBag.error = errorMessage + error;
             //return View(ad);
-            return RedirectToAction("Filtering");
+            return RedirectToAction("AdsView");
             //return RedirectToAction("EditAd");
         }
         */
@@ -172,7 +198,7 @@ namespace NotBlocket2.Controllers {
 
                 pm.UpdateAd(ad, out error);
                 ViewBag.error = error;
-                return RedirectToAction("Filtering");
+                return RedirectToAction("AdsView");
                 //return View(ad);
             }
 
@@ -189,7 +215,7 @@ namespace NotBlocket2.Controllers {
 
 
         [HttpGet]
-        public ActionResult GetPersonWithDataSet() {
+        public ActionResult ProfilesView() {
             List<Profile> Profilelist = new List<Profile>();
             ProfileMethods pm = new ProfileMethods();
             string error = "";
@@ -198,6 +224,7 @@ namespace NotBlocket2.Controllers {
             return View(Profilelist);
         }
 
+        /*
         //Display login view
         public IActionResult Login() {
             return View();
@@ -220,9 +247,9 @@ namespace NotBlocket2.Controllers {
         public IActionResult LoginPage() {
             return View();
         }
-
+        */
 		
-		public IActionResult Filtering() {
+		public IActionResult AdsView() {
             ProfileMethods pm = new ProfileMethods();
             LocationMethods lm = new LocationMethods();
             AdMethods am = new AdMethods();

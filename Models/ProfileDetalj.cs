@@ -27,5 +27,22 @@ namespace NotBlocket2.Models {
         public int Id { get; set; }
 
     }
-    
+
+    // Create a validator to make sure we only allow locations that are in the location table
+    public class LocationIdValidatorAttribute : ValidationAttribute {
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext) {
+            int locationId = (int)value;
+            string errorMessage;
+            LocationMethods lm = new LocationMethods();
+            List<int> locationIds = lm.GetLocationsWithDataSet(out errorMessage).Select(x => x.Id).ToList();
+
+            if (locationIds.Contains(locationId)) {
+                return ValidationResult.Success;
+            }
+            else {
+                return new ValidationResult("The Location ID is not valid.");
+            }
+        }
+    }
+
 }

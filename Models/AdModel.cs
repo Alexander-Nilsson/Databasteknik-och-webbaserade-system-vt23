@@ -28,9 +28,7 @@ namespace NotBlocket2.Models {
     public class AdMethods {
 
         public AdMethods() { }
-
-
-
+        
 		private bool IsValidImageFormat(string fileName) {
 			var extension = Path.GetExtension(fileName).ToLowerInvariant();
 			return extension == ".jpg" || extension == ".jpeg" || extension == ".png";
@@ -64,6 +62,7 @@ namespace NotBlocket2.Models {
 
             return Path.Combine("/images", fileName);
         }
+        
 
 
         public Ad GetAdById(int id, out string errormsg) {

@@ -1,13 +1,14 @@
 ﻿@model NotBlocket2.Models.ViewModelProfileAdsLocation
 
-
-<h2>Filtering</h2>
+<h1>Ads</h1>
+@*
 @ViewBag.error
 @ViewBag.errorx
+*@
 
 <div class="row">
 	<div class="form-group col-md-4">
-		<form asp-action="Filtering" method="post">
+		<form asp-action="AdsView" method="post">
 			<div class="form-group">
 				<select class="form-control" id="Category" name="Category">
 					@foreach (var category in Model.AdList.Select(x => x.Category).Distinct()) {
@@ -16,14 +17,13 @@
 				</select>
 			</div>
 			<div class="form-group">
-				<input type="submit" value="Filtering" class="btn btn-default" />
+				<input type="submit" value="Apply Filter" class="btn btn-default" />
 			</div>
 		</form>
 	</div>
 </div>
 
 
-<h4>Ad Table</h4>
 <table class="table">
 	<tr>
 		<th>Name</th>
