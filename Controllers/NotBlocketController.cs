@@ -45,7 +45,7 @@ namespace NotBlocket2.Controllers {
 
 
 
-        // Functions related to creating accounts
+        // Functions related to creating profiles
         [HttpGet]
         public IActionResult CreateAccount() {
             return View();
