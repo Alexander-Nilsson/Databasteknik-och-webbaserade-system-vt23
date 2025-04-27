@@ -1,0 +1,54 @@
+﻿@model _5TF048_lab1.Models.Dinner
+
+@{
+    ViewData["Title"] = "Recept";
+}
+
+<h1>Recept @Html.DisplayFor(model => model.NumberofPortions) portioner.</h1>
+
+<div>
+    <h4>Dinner</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Flour)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Flour)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Egg)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Egg)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Milk)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Milk)
+        </dd>
+
+    </dl>
+</div>
+<div>
+    <p>What did you think about the food?</p>
+    <a asp-action="Evaluate">Evaluate</a>
+</div>
+
+<div>
+    <a asp-action="Start">Back to Start</a>
+</div>

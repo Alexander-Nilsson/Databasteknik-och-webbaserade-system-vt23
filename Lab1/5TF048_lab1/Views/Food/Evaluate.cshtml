@@ -1,0 +1,31 @@
+﻿@model List<SelectListItem>
+
+@{
+    ViewData["Title"] = "Evaluate";
+}
+
+<h2>Evaluate</h2>
+
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Finish" method="post">
+            <div class="form-group">
+                @foreach (SelectListItem item in Model){
+                <input type ="radio" name="Evaluate" value="@Html.DisplayFor(model => item.Value)">@item.Text<br />
+
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Finish" class="btn btn-default" />
+            </div>
+        </form>
+
+
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Start">Back to Start</a>
+</div>

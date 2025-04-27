@@ -1,0 +1,38 @@
+﻿@model _5TF048_lab1.Models.Dinner
+
+@{
+    ViewData["Title"] = "Start";
+}
+
+<h2>Its time to cook some food!</h2>
+
+<p>Fill name, nr of porions and date</p>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Recept" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberofPortions" class="control-label"></label>
+                <input asp-for="NumberofPortions" class="form-control" />
+                <span asp-validation-for="NumberofPortions" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" />
+                <span asp-validation-for="Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Get recept" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
